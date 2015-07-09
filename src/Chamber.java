@@ -1,4 +1,13 @@
-/*
+﻿/*
+<<<<<<< HEAD
+=======
+CSE 205: <Class #40302> / <MTWTrF 8:30 am - 9:30 am>
+
+Assignment: <assignment #06>
+
+Author: <Kevin Espinoza> & <1203366978>, …
+
+>>>>>>> origin/prmichaelsen-patch-1
 Description: <The Chamber Class allows chemical to be added to certain 
 chamber. The user is allowed to enter any chemicals and amount they need 
 to any chamber. If there is a repeated chemical, the mixer will handle
@@ -65,7 +74,6 @@ public class Chamber implements Product{
 		// else, add this new solution
 		values.add(s);
 	}
-
 	
 	/**
 	 * Searches for solution by solution name
