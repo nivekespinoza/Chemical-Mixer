@@ -4,41 +4,75 @@ package product;
   * and behavior of the Solution datatype
   * 
   * @author Kevin Espinoza
+  * @author Patrick Michaelsen
   * @version "%I%, %G%"
   * @since 1.0
   */
 
-public class Solution implements Product, Comparable<Solution> {
+public class Solution extends Product implements Comparable<Product> {
    
     private String name;
-    private int volume;
+    private double volume;
 
-    private Solution()
+    public Solution(String name, double volume)
     {
-    	name="";
-    	volume=0;
-    }
-
-    public Solution(String name, int volume)
-    {
+    	if(volume<0)
+    		throw new NegativeVolumeException(""+volume);
         this.name = name;
         this.volume = volume;    
     }    
     
     /**
-     * Empties and adds contents of <code>other</code> 
+     * Empties and combines contents of <code>other</code> 
      * <code>this</code> solution. 
-     * //TODO add solution name check
-     * @param Solution other	solution to be added
+     * @param Product other		the product to be combined
      */
-    public void combine(Solution other)
+    public Product combine(Product other)
     {
-        int measure = this.getVolume();
-        int measure2 = other.getVolume();
-        int measurement = measure + measure2;
-         
-        this.setVolume(measurement);
-        other.setVolume(0);
+    	if(other==null)
+    		return other;
+    	
+    	if(other instanceof Chamber){
+    		Chamber chamber = (Chamber) other;
+    		chamber.add(this);
+    		chamber.sort();
+    		
+    		return chamber;
+    	}
+    	
+    	if(other instanceof Solution){
+    		Solution solution = (Solution) other;
+    		
+    		//if the solutions are the same combine them
+    		//and return new solution
+    		if(equals(solution)){
+    			double volume = this.getVolume();
+        		double volumeOther = solution.getVolume();
+         	         
+        		this.setVolume(volume+volumeOther);
+        		solution.setVolume(0);
+        		 
+        		
+        	    other = null;
+        	    
+        	    return this;
+        	//otherwise create new chamber
+        	//and return that
+    		}else{
+    			Chamber chamber = new Chamber();
+    			chamber.add(solution);
+    			chamber.add(this);
+    			
+    			//other is now empty so delete it
+    			other = null;
+    			
+    			return chamber;
+    		}
+    			
+    		
+    	}
+        
+    	return null;
     }
  
     public String getName()
@@ -46,7 +80,7 @@ public class Solution implements Product, Comparable<Solution> {
         return name;
     }
  
-    public int getVolume()
+    public double getVolume()
     {
         return volume;
     }
@@ -56,21 +90,43 @@ public class Solution implements Product, Comparable<Solution> {
         this.name = name;
     }
      
-    public void setVolume(int i)
+    public void setVolume(double volume)
     {
-        this.volume = i;       
+    	if(volume>getVolume())
+			throw new CannotIncreaseVolumeException(volume/getVolume()*100+"");
+        this.volume = volume;       
     }
     
 	@Override
 	public String toString()
 	{
-		return name + ": " + volume + " Liter(s)";
+		return getClass().getSimpleName() + 
+				" " + name + 
+				": " + volume + 
+				" " + UNITS;
 	}
-
+	
 	@Override
-	public int compareTo(Solution other)
-	{
-		return this.getVolume() - other.getVolume();
+	public boolean equals(Object other){
+		 if (other == null){
+			 return false;
+		 }
+
+		 if (getClass() != other.getClass()){
+			 return false;
+		 }
+		 
+		 Solution solution = (Solution) other;
+		 if(!getName().equals(solution.getName())){
+			return false;
+		 }
+		 
+		 return true;
+	}
+	
+	@Override
+	public int hashCode(){
+		return Integer.valueOf(name);
 	}
 }
  

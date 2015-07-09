@@ -1,8 +1,7 @@
 /**
  * Defines an interface for Product datatypes
- */
-/**
- * @author Kevin Espinoza
  *
+ * @author Patrick Michaelsen
+ * @version "%I%, %G%"
  */
 package product;

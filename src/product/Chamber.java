@@ -23,6 +23,7 @@ to any chamber. If there is a repeated chemical, the mixer will handle
   * <p>
   *  
   * @author Kevin Espinoza
+  * @author Patrick Michaelsen
   * @version "%I%, %G%"
   */
 
@@ -30,26 +31,29 @@ package product;
 
 import java.util.*;
  
-public class Chamber implements Product{
+public class Chamber extends Product implements Comparable<Product>{
 	private ArrayList<Solution> values;
 	private String name;
+	private static int id = 0;
     
-	private Chamber()
+	public Chamber()
 	{
 		values=new ArrayList<Solution>();
-		name="";
+		name=""+id++;
 	}
     
     public Chamber(ArrayList<Solution> values)
     {
     	this();
     	for (Solution solution : values)
-    		this.add(solution);
+    		add(solution);
+    	sort();
     }
      
     public Chamber(String name, ArrayList<Solution> values)
     {
     	this(values);
+    	sort();
     }
      	
     /**
@@ -62,16 +66,18 @@ public class Chamber implements Product{
 	// increment the volume
 	public void add(Solution s)
 	{
-		for (Solution solution : values)
-		{
-			if (solution.getName().equals(s.getName()))
+		if(s.getVolume()>0){
+			for (Solution solution : values)
 			{
-				solution.combine(s);
-				return;
+				if (solution.getName().equals(s.getName()))
+				{
+					solution.combine(s);
+					return;
+				}
 			}
+			// else, add this new solution
+			values.add(s);
 		}
-		// else, add this new solution
-		values.add(s);
 	}
 	
 	/**
@@ -104,11 +110,11 @@ public class Chamber implements Product{
      
      
     /**
-     * Adds the solutions in <code>other</code> to 
+     * Empties and combines the product <code>other</code> to 
      * <code>this</code> chamber, removes duplicates,
      * and sorts in descending order by solution 
      * volume.
-     * @param the chamber to be added
+     * @param Product other		the product to be combined
      * @return the resulting chamber
      */
     /*
@@ -118,20 +124,33 @@ public class Chamber implements Product{
      * copies both arrays into one array
      * repeats till there are no further copies
      */
-    public Chamber combine(Chamber other)
+    public Product combine(Product other)
 	{
-    	Chamber newChamber = new Chamber();
+    	if(other==null)
+    		return other;
     	
-    	for (Solution solution : this.values)
-    		newChamber.add(solution);
+    	if(other instanceof Chamber){
+    		Chamber chamber = (Chamber) other;
+        	for (Solution solution : chamber.values){
+        		this.add(solution);
+        	}
+        	
+        	chamber.values.removeAll(values);
+        	this.sort();
+    	}
     	
-    	for (Solution solution : other.values)
-    		newChamber.add(solution);
-    	//instant sort
-    	newChamber.sort();
+    	if(other instanceof Solution){
+    		Solution solution = (Solution) other;
+    		this.add(solution);
+    		this.sort();
+    	}
     	
-    	return newChamber;
     	
+    	//other is now empty so delete it
+    	other = null;
+    	
+    	return this;
+     	
     }  
      
     public ArrayList<Solution> getValues()
@@ -142,7 +161,12 @@ public class Chamber implements Product{
 	@Override
 	public String toString()
 	{
-		return "Ingredients: " + values;
+		return getClass().getSimpleName() + 
+				" " + getName() + 
+				": " + getVolume() + 
+				" " + UNITS + 
+				"\nIngredients: " + 
+				values;
 	}
 
 	@Override
@@ -158,24 +182,103 @@ public class Chamber implements Product{
 	}
 
 	@Override
-	public int getVolume()
+	public double getVolume()
 	{
-		int volume = 0;
+		double volume = 0;
 		for(Solution s: values)
 			volume+=s.getVolume();
 		return volume;
 	}
 
+	/**
+	 * Reduce the volume of a chamber,
+	 * assumes solution is homogeneously
+	 * mixed
+	 */
 	@Override
-	public void setVolume(int volume)
+	public void setVolume(double volume)
 	{
-		// TODO Auto-generated method stub		
+		double scalar = volume/getVolume();
+		
+		if(volume<0){
+			throw new NegativeVolumeException(""+volume);
+		}
+		
+		if(volume>getVolume()){
+			throw new CannotIncreaseVolumeException(100*scalar+"%");
+		}
+		
+		for(Solution s: values){
+			s.setVolume(s.getVolume()*scalar);
+		}
 	}
 	
+	@Override
+	public boolean equals(Object other){
+		 if (other == null){
+			 return false;
+		 }
+
+		 if (getClass() != other.getClass()){
+			 return false;
+		 }
+		 
+		 Chamber chamber = (Chamber) other;
+		 
+		 if(values.size()!=chamber.values.size()){
+			 return false;
+		 }
+		
+		 double chamberVolume = getVolume();
+		 double chamberOtherVolume = chamber.getVolume();
+		 
+		 for(int i = 0; i < values.size(); i++){
+			 Solution solution = values.get(i);
+			 Solution solutionOther = chamber.values.get(i);
+			 
+			 if(!solution.equals(solutionOther))
+				 return false;
+			 
+			 double solutionVolume = solution.getVolume();
+			 double solutionOtherVolume = solutionOther.getVolume();
+			 
+			 if(solutionVolume/chamberVolume!=solutionOtherVolume/chamberOtherVolume)
+				 return false;
+		 }
+		 
+		 return true;
+	}
+	
+	@Override
+	public int hashCode(){
+		
+		int namesHash = 0;
+		int volumesHash = 0;
+		
+		double chamberVolume = getVolume();
+		
+		for(int i = 0; i < values.size(); i++){
+			Solution solution = values.get(i);
+			double solutionVolume = solution.getVolume();
+			
+			volumesHash += solutionVolume/chamberVolume;
+			namesHash += Integer.valueOf(solution.getName());
+		 }
+		 
+		return (volumesHash << 16) | (namesHash >>> 16);
+	}
+	
+	/**
+	 * sorts solutions in descending
+	 * order by volume
+	 */
 	public void sort()
 	{
 		Collections.sort(values);
 		Collections.reverse(values);
 	}
+
+	
+	
 }
  

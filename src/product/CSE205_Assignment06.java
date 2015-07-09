@@ -11,7 +11,6 @@ public class CSE205_Assignment06 {
         Chamber c_1 = null;
         Chamber c_2 = null;
         Chamber c_3 = null;
-
        
         //Gives the user an option to pick which chamber their going to work on
         while(chamberChosen != 321)
@@ -30,8 +29,8 @@ public class CSE205_Assignment06 {
                 break;
                  
             case 3:// Mixes Chamber one and two & make sure c1 and c2 aren't empty
-            	c_3 = c_1.combine(c_2);      
-            	System.out.println(c_3);
+            	c_1.combine(c_2);      
+            	System.out.println(c_1);
                 break;
                  
             case 321:// Exits the system
