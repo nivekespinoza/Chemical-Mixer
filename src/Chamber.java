@@ -3,7 +3,7 @@ CSE 205: <Class #40302> / <MTWTrF 8:30 am - 9:30 am>
 
 Assignment: <assignment #06>
 
-Author: <Kevin Espinoza> & <1203366978>, …
+Author: <Kevin Espinoza> & <1203366978>, â€¦
 
 Description: <The Chamber Class allows chemical to be added to certain 
 chamber. The user is allowed to enter any chemicals and amount they need 
@@ -49,11 +49,10 @@ public class Chamber implements Product{
 		values.add(s);
 	}
 
-	/*
-     * looks thru the array for s.name
-     * if found save the location
-     * return location of index
-     */
+     /**
+      *  searchs by solution name
+      *  returns location of first indexed solution with matching name
+      */
     private int search(Solution s)
     {
         int index = -1;//*******
@@ -64,10 +63,10 @@ public class Chamber implements Product{
              
             if(name1.equals(name2))
             {
-                index = i;
+                return index; //the index of copy     
             }
         }
-        return index;//the index of copy        
+         
     }
      
     /*
@@ -119,7 +118,10 @@ public class Chamber implements Product{
 	@Override
 	public int getVolume()
 	{
-		return 0;
+		int volume=0;
+		for(Solution s: values)
+			volume+=s.getVolume();
+		return volume;
 	}
 
 	@Override
