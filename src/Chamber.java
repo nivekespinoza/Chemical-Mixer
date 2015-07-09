@@ -66,12 +66,20 @@ public class Chamber implements Product{
 		values.add(s);
 	}
 
+	
+	/**
+	 * Searches for solution by solution name
+	 * @param Solution s	solution to be searched for by name
+	 * @return index of found solution, -1 if solution is not found
+	 * @deprecated use <code>add</code> to remove duplicates, use of
+	 * search not encouraged
+	 */
 	/*
      * looks thru the array for s.name
      * if found save the location
      * return location of index
      */
-    private int search(Solution s)
+    public int search(Solution s)
     {
         int index = -1;//*******
         for(int i = 0; i < values.size(); i++)
@@ -81,10 +89,9 @@ public class Chamber implements Product{
              
             if(name1.equals(name2))
             {
-                index = i;
+                return index; //index of found solution
             }
         }
-        return index;//the index of copy        
     }
      
     /*
