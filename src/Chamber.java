@@ -1,41 +1,58 @@
 /*
-CSE 205: <Class #40302> / <MTWTrF 8:30 am - 9:30 am>
-
-Assignment: <assignment #06>
-
-Author: <Kevin Espinoza> & <1203366978>, …
-
 Description: <The Chamber Class allows chemical to be added to certain 
 chamber. The user is allowed to enter any chemicals and amount they need 
 to any chamber. If there is a repeated chemical, the mixer will handle
  the redundancy and combine the the same chemical and reports the updated 
  volume. Mixes the solutions for the next phase.Then it orders the chemicals with a sort 
  method in desending order
- >
  */
+ 
+ /**
+  * Chamber is a concrete class that defines
+  * properties and behavior of a chamber datatype
+  * <p>
+  * Chambers contain a list of solutions and
+  * can be added to other Chambers
+  * or Solutions to create new Chambers.
+  * <p>
+  *  
+  * @author Kevin Espinoza
+  * @version "%I%, %G%"
+  */
 
 import java.util.*;
  
 public class Chamber implements Product{
-    private ArrayList<Solution> values = new ArrayList<Solution>();
+    private ArrayList<Solution> values;
     private String name;
     
-	public Chamber()
+	private Chamber()
 	{
-		// TODO 
+		values=new ArrayList<Solution>();
+		name="";
 	}
     
     public Chamber(ArrayList<Solution> values)
     {
+    	Chamber();
     	for (Solution solution : values)
-    		this.Add(solution);
+    		this.add(solution);
+     }
+     
+     public Chamber(String name, ArrayList<Solution> values)
+     {
+     	Chamber(name,values);
      }
      	
+     	/**
+     	 * Adds a solution to the chamber, combines duplicates
+     	 * @param Solution s 	the solution to add
+     	 */
 	// add solution s to this chamber		
 	// look through all the solutions in this chamber
 	// and if the solution we are adding is already in this chamber then
 	// increment the volume
-	public void Add(Solution s)
+	public void add(Solution s)
 	{
 		for (Solution solution : values)
 		{
@@ -82,10 +99,10 @@ public class Chamber implements Product{
     	Chamber newChamber = new Chamber();
     	
     	for (Solution solution : this.values)
-    		newChamber.Add(solution);
+    		newChamber.add(solution);
     	
     	for (Solution solution : other.values)
-    		newChamber.Add(solution);
+    		newChamber.add(solution);
     	//instan sort
     	newChamber.sort();
     	
