@@ -5,7 +5,7 @@ package product;
 
 /**
  * CannotIncreaseVolumeException is exception
- * thrown if user tries to increase volume past 100%
+ * thrown if user tries to scale volume past 100%
  * @author Patrick Michaelsen
  * @version "%I%, %G%"
  */

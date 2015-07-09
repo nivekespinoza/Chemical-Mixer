@@ -36,12 +36,21 @@ public class Chamber extends Product implements Comparable<Product>{
 	private String name;
 	private static int id = 0;
     
+	/**
+	 * create empty chamber with auto-incrementing <code>name</code>
+	 */
 	public Chamber()
 	{
 		values=new ArrayList<Solution>();
 		name=""+id++;
 	}
     
+	/**
+	 * create a chamber with auto-incrementing <code>name</code>
+	 * with list of solutions
+	 * @param values an array of solutions
+	 * @see #Chamber()
+	 */
     public Chamber(ArrayList<Solution> values)
     {
     	this();
@@ -50,15 +59,23 @@ public class Chamber extends Product implements Comparable<Product>{
     	sort();
     }
      
+    /**
+     * create a named chamber
+	 * with list of solutions
+	 * @param values an array of solutions
+	 * @param name the lowercase name of the chamber 
+	 * @see #Chamber(values)
+	 */
     public Chamber(String name, ArrayList<Solution> values)
     {
     	this(values);
+    	this.name = name.toLowerCase();
     	sort();
     }
      	
     /**
-     * Adds a solution to the chamber, combines duplicates
-     * @param Solution s 	the solution to add
+     * Adds a solution to the chamber, combines duplicate solutions
+     * @param s 	the solution to add
      */
 	// add solution s to this chamber		
 	// look through all the solutions in this chamber
@@ -69,7 +86,7 @@ public class Chamber extends Product implements Comparable<Product>{
 		if(s.getVolume()>0){
 			for (Solution solution : values)
 			{
-				if (solution.getName().equals(s.getName()))
+				if (solution.equals(s))
 				{
 					solution.combine(s);
 					return;
@@ -78,11 +95,12 @@ public class Chamber extends Product implements Comparable<Product>{
 			// else, add this new solution
 			values.add(s);
 		}
+		//sort();
 	}
 	
 	/**
 	 * Searches for solution by solution name
-	 * @param Solution s	solution to be searched for by name
+	 * @param s	solution to be searched for by name
 	 * @return index of found solution, -1 if solution is not found
 	 * @deprecated use <code>add</code> to remove duplicates, use of
 	 * search not encouraged
@@ -114,7 +132,7 @@ public class Chamber extends Product implements Comparable<Product>{
      * <code>this</code> chamber, removes duplicates,
      * and sorts in descending order by solution 
      * volume.
-     * @param Product other		the product to be combined
+     * @param other		the product to be combined
      * @return the resulting chamber
      */
     /*
@@ -194,9 +212,13 @@ public class Chamber extends Product implements Comparable<Product>{
 	 * Reduce the volume of a chamber,
 	 * assumes solution is homogeneously
 	 * mixed
+	 * @throws NegativeVolumeException volume must be > 0
+	 * @throws CannotIncreaseVolumeException volume cannot 
+	 * scale beyond 100%<br>of original volume
+	 * @return 
 	 */
 	@Override
-	public void setVolume(double volume)
+	public Product setVolume(double volume)
 	{
 		double scalar = volume/getVolume();
 		
@@ -208,11 +230,27 @@ public class Chamber extends Product implements Comparable<Product>{
 			throw new CannotIncreaseVolumeException(100*scalar+"%");
 		}
 		
+		Chamber excessChamber = new Chamber();
+		
+		//for each solution in values
 		for(Solution s: values){
-			s.setVolume(s.getVolume()*scalar);
+			//add it to the excess chamber
+			excessChamber.add(
+					//get the excess solution
+					(Solution)s.setVolume(
+							//adjust the volume
+							s.getVolume()*scalar));
 		}
+		
+		return excessChamber;
 	}
 	
+	/**
+	 * @returns true if <code>this</code>
+	 * chamber has same ratio of solutions
+	 * as <code>other</code> chamber
+	 * @param other the other Product
+	 */
 	@Override
 	public boolean equals(Object other){
 		 if (other == null){

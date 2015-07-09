@@ -14,28 +14,28 @@ abstract class Product implements Comparable<Product>{
 	final static String UNITS = "mL";
 	
     /**
-     * Gets element of name from the end of the list
-     * @return 
+     * Gets the product's name
+     * @return  the product's name
      */
     abstract String getName();
     
     /**
-     * Sets element of name from the end of the list
-     * @return 
+     * Updates the product's name
+     * @param  name the new lowercase name 
      */
     abstract void setName(String name);
      
     /**
-     * Gets element of Volume from the end of the list
-     * @return 
+     * Gets product's volume
+     * @return	the product's volume
      */
     abstract double getVolume();
     
     /**
-     * Sets element of Volume from the end of the list
-     * @return 
+     * Updates the product's volume
+     * @param volume	the new volume
      */
-    abstract void setVolume(double volume);
+    abstract Product setVolume(double volume);
     
     /**
      * Combines two products by adding
@@ -52,6 +52,7 @@ abstract class Product implements Comparable<Product>{
 	 * this product is greater than (result is > 0)
 	 * equal to (result is = 0) or less than
 	 * (result is < 0) the argument <code>other</code>
+	 * @param other the product to be added
 	 */
 	@Override
 	public int compareTo(Product other) {

@@ -14,18 +14,23 @@ public class Solution extends Product implements Comparable<Product> {
     private String name;
     private double volume;
 
+    /**
+     * @param name the lowercase name of the product
+     * @param volume the volume of the product
+     * @throws NegativeVolumeException volume must be > 0
+     */
     public Solution(String name, double volume)
     {
     	if(volume<0)
     		throw new NegativeVolumeException(""+volume);
-        this.name = name;
+        this.name = name.toLowerCase();
         this.volume = volume;    
     }    
     
     /**
      * Empties and combines contents of <code>other</code> 
      * <code>this</code> solution. 
-     * @param Product other		the product to be combined
+     * @param other		the product to be combined
      */
     public Product combine(Product other)
     {
@@ -90,11 +95,19 @@ public class Solution extends Product implements Comparable<Product> {
         this.name = name;
     }
      
-    public void setVolume(double volume)
+    /**
+     * Reduce the volume of a solution
+     * @throws CannotIncreaseVolumeException 
+     * @return excess solution
+     */
+    public Product setVolume(double volume)
     {
     	if(volume>getVolume())
 			throw new CannotIncreaseVolumeException(volume/getVolume()*100+"");
-        this.volume = volume;       
+        
+    	Solution excessSolution = new Solution(name,this.volume-volume);
+    	this.volume = volume;
+        return excessSolution;
     }
     
 	@Override
@@ -106,6 +119,12 @@ public class Solution extends Product implements Comparable<Product> {
 				" " + UNITS;
 	}
 	
+	/**
+	 * @returns true if <code>this</code>
+	 * solution has same name
+	 * as <code>other</code> solution
+	 * @param other the other Product
+	 */
 	@Override
 	public boolean equals(Object other){
 		 if (other == null){
