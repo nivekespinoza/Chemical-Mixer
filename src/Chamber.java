@@ -94,6 +94,15 @@ public class Chamber implements Product{
         }
     }
      
+     
+     /**
+      * Adds the solutions in <code>other</code> to 
+      * <code>this</code> chamber, removes duplicates,
+      * and sorts in descending order by solution 
+      * volume.
+      * @param the chamber to be added
+      * @return the resulting chamber
+      */
     /*
      * the combine method does the values being passed in
      * if the strings are the same add the 
