@@ -1,17 +1,17 @@
-/*
-CSE 205: <Class #40302> / <MTWTrF 8:30 am - 9:30 am>
-
-Assignment: <assignment #06>
-
-Author: <Kevin Espinoza> & <1203366978>, …
-
-Description: <The Solution Class establishes the name and the volumes
-of the chemical being added, this is the solution being added in the chamber >
- */
+ /**
+  * Solution is a concrete class defining the properties
+  * and behavior of the Solution datatype
+  * 
+  * @author Kevin Espinoza
+  * @version "%I%, %G%"
+  * @since 1.0
+  */
 
 public class Solution implements Product, Comparable<Solution> {
+   
     private String name;
     private int volume;
+     
      
     public Solution(String name, int volume)
     {
