@@ -152,7 +152,10 @@ public class Chamber implements Product{
 	@Override
 	public int getVolume()
 	{
-		return 0;
+		int volume = 0;
+		for(Solution s: values)
+			volume+=s.getVolume();
+		return volume;
 	}
 
 	@Override
