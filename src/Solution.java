@@ -11,14 +11,25 @@ public class Solution implements Product, Comparable<Solution> {
    
     private String name;
     private int volume;
-     
-     
+
+    private Solution()
+    {
+    	name="";
+    	volume=0;
+    }
+
     public Solution(String name, int volume)
     {
         this.name = name;
         this.volume = volume;    
     }    
-     
+    
+    /**
+     * Emptys and adds contents of <code>other</code> 
+     * <code>this</code> solution. 
+     * //TODO add solution name check
+     * @param Solution other	solution to be added
+     */
     public void combine(Solution other)
     {
         int measure = this.getVolume();
@@ -48,7 +59,7 @@ public class Solution implements Product, Comparable<Solution> {
     {
         this.volume = i;       
     }
-
+    
 	@Override
 	public String toString()
 	{
