@@ -1,24 +1,35 @@
-/*
-CSE 205: <Class #40302> / <MTWTrF 8:30 am - 9:30 am>
-
-Assignment: <assignment #06>
-
-Author: <Kevin Espinoza> & <1203366978>, …
-
-Description: <The Solution Class establishes the name and the volumes
-of the chemical being added, this is the solution being added in the chamber >
- */
+ /**
+  * Solution is a concrete class defining the properties
+  * and behavior of the Solution datatype
+  * 
+  * @author Kevin Espinoza
+  * @version "%I%, %G%"
+  * @since 1.0
+  */
 
 public class Solution implements Product, Comparable<Solution> {
+   
     private String name;
     private int volume;
-     
+
+    private Solution()
+    {
+    	name="";
+    	volume=0;
+    }
+
     public Solution(String name, int volume)
     {
         this.name = name;
         this.volume = volume;    
     }    
-     
+    
+    /**
+     * Emptys and adds contents of <code>other</code> 
+     * <code>this</code> solution. 
+     * //TODO add solution name check
+     * @param Solution other	solution to be added
+     */
     public void combine(Solution other)
     {
         int measure = this.getVolume();
@@ -48,7 +59,7 @@ public class Solution implements Product, Comparable<Solution> {
     {
         this.volume = i;       
     }
-
+    
 	@Override
 	public String toString()
 	{
